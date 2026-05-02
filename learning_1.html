@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Machine Learning – Teil 1: Einführung</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/3.4.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; max-width: 900px; margin: 0 auto; padding: 30px 20px 80px; background: #f5f5f5; line-height: 1.6; }
+    .chapter-nav { display: flex; gap: 6px; margin-bottom: 28px; align-items: center; }
+    .chapter-dot { width: 30px; height: 30px; border-radius: 50%; background: #ddd; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; color: #666; text-decoration: none; }
+    .chapter-dot.active { background: #31708f; color: white; }
+    .chapter-dot.done   { background: #3c763d; color: white; }
+    .chapter-dot.locked { pointer-events: none; }
+    .cell { margin-top: 44px; }
+    .alert-success { background-color: #dff0d8 !important; }
+    .alert-info    { background-color: #d9edf7 !important; }
+    .alert-danger  { background-color: #f2dede !important; }
+  </style>
+</head>
+<body>
+  <nav class="chapter-nav">
+    <span style="font-size:13px;color:#888;margin-right:4px;">Teil</span>
+    <span class="chapter-dot active">1</span>
+    <span class="chapter-dot locked">2</span>
+    <span class="chapter-dot locked">3</span>
+    <span class="chapter-dot locked">4</span>
+    <span class="chapter-dot locked">5</span>
+    <span class="chapter-dot locked">6</span>
+  </nav>
+
+  <!-- Cell 1: Einführung – Die digitale Welt -->
+  <div class="cell">
+    <div class="alert alert-success" style="border-radius:10px;position:relative;padding:24px 24px 20px;margin-top:25px;border:4px solid #3c763d;">
+      <span style="position:absolute;top:-28px;left:16px;background:#3c763d;color:white;border-radius:50%;width:56px;height:56px;display:inline-flex;align-items:center;justify-content:center;font-size:28px;"><i class="fa fa-book"></i></span>
+      <h2>Einführung – Die digitale Welt</h2>
+      <div style="display:flex;gap:16px;align-items:flex-start;margin-bottom:12px;">
+        <p style="margin:0;">Die Welt ist vernetzter und digitaler denn je. Dein Stundenplan, Vertretungen und das Mittagessen in der Schule sind in vielen Schulen über das Internet und über Apps einsehbar. Erst vor kurzem wurde eine elektronische Patientenakte eingeführt, wo sogar Dokumente wie dein Impfpass gespeichert werden können.</p>
+        <img src="src/images/office.jpg" style="max-width:220px;border-radius:6px;flex-shrink:0;">
+      </div>
+      <div style="display:flex;gap:16px;align-items:flex-start;margin-bottom:12px;">
+        <p style="margin:0;">Wahrscheinlich gehören digitale Dienste auch für dich ganz selbstverständlich zum Alltag. Soziale Netzwerke wie Instagram und TikTok sowie Messenger wie WhatsApp oder Suchmaschinen wie Google sind meistens kostenlos nutzbar. Dazu kommen bekannte Streaminganbieter wie YouTube, Netflix oder Amazon Prime, die viele von uns fast täglich nutzen.</p>
+        <img src="src/images/revenue.jpg" style="max-width:220px;border-radius:6px;flex-shrink:0;">
+      </div>
+      <p>Die Unternehmen hinter diesen Anwendungen zählen zu den wertvollsten und erfolgreichsten Konzernen der Welt. In ihren riesigen Gebäuden arbeiten unzählige Programmierer und Programmiererinnen an der ständigen Verbesserung und Überwachung der Software. Da der Betrieb dieser riesigen Datenmengen sehr viel Energie benötigt, müssen die Firmen außerdem extrem hohe Stromkosten bezahlen.</p>
+    </div>
+  </div>
+
+  <!-- Cell 2: Kostenlose Apps – aber wie? -->
+  <div class="cell">
+    <div class="alert alert-success" style="border-radius:10px;position:relative;padding:24px 24px 20px;margin-top:25px;border:4px solid #3c763d;">
+      <span style="position:absolute;top:-28px;left:16px;background:#3c763d;color:white;border-radius:50%;width:56px;height:56px;display:inline-flex;align-items:center;justify-content:center;font-size:28px;"><i class="fa fa-book"></i></span>
+      <h2>Kostenlose Apps und Dienste – Aber wie?</h2>
+      <p>Während die Gebäude, die Server und die vielen Programmierer der großen Technikfirmen Milliarden kosten, ist die Nutzung von sozialen Netzwerken oder Chatbots für uns meistens komplett kostenlos. Wie kann das funktionieren? Viele denken sich dabei, dass durch das einfache Schalten von Werbung direkt alles bezahlt wird. Doch herkömmliche Anzeigen wie im Fernsehen, auf Plakaten, zwischen Reels und vor Youtube Videos bringen nicht genug Geld ein, um diese riesigen Ausgaben der Unternehmen zu decken. Der wahre Grund für das kostenlose Angebot liegt irgendwo dazwischen.</p>
+      <p>Die Antwort lautet: Deine Informationen sind die eigentliche Währung. Jede deiner Aktionen im Netz hat für die Unternehmen einen hohen Wert, da sie dadurch genau wissen, was du magst und wofür du dich interessierst. Zuvor werden diese gesammelten Daten jedoch erst aufwendig analysiert, um deine Vorlieben und Gewohnheiten ganz genau zu verstehen. Dieses Wissen ermöglicht es den Firmen dann, viel wirksamere Werbung zu schalten, die exakt zu deinen Interessen passt. Werbetreibende bezahlen für diesen gezielten Zugang zu dir sehr viel Geld an die App-Anbieter. Am Ende bezahlst du also nicht mit Euro, sondern mit deinem digitalen Verhalten und deinen Daten.</p>
+      <p>Es stellt sich dadurch die Frage, welche Technologien genau eingesetzt werden, um aus deinem Konsumverhalten am Ende einen Gewinn zu machen.</p>
+      <hr>
+      <div style="display:flex;gap:16px;align-items:flex-start;">
+        <p>Um diese Frage zu beantworten, beginnst du mit einem kleinen Rätsel. Auf der nächsten Seite findest du zwei kurze Texte. Mit diesen Texten kannst du ein Lösungswort herausfinden, um den nächsten Teil freizuschalten. Der Inhalt der Texte ist nicht so wichtig.</p>
+        <img src="src/images/puzzle.jpg" style="max-width:300px;border-radius:6px;flex-shrink:0;">
+      </div>
+    </div>
+  </div>
+
+  <!-- Cell 3: Task prompt -->
+  <div class="cell">
+    <div class="alert alert-info" style="border-radius:10px;position:relative;padding:24px 24px 20px;margin-top:25px;border:4px solid #31708f;">
+      <span style="position:absolute;top:-28px;left:16px;background:#31708f;color:white;border-radius:50%;width:56px;height:56px;display:inline-flex;align-items:center;justify-content:center;font-size:28px;"><i class="fa fa-pencil"></i></span>
+      <h3>Aufgabe: Puzzle</h3>
+      <p>Lies die beiden Textauszüge auf der nächsten Seite aufmerksam durch und probiere das richtige Lösungswort zu finden.</p>
+    </div>
+  </div>
+
+  <!-- Cell 4: Paper notes (no background image – clean styled divs) -->
+  <div class="cell">
+    <div style="font-family:'Courier New',Courier,monospace;padding:20px;display:flex;flex-direction:column;align-items:center;gap:20px;">
+
+      <div style="position:relative;display:inline-block;width:fit-content;max-width:540px;border-radius:8px;overflow:hidden;box-shadow:2px 2px 8px rgba(0,0,0,0.15);border-left:5px solid #e0d19d;transform:rotate(-1deg);">
+        <div style="background-color:rgba(252,245,229,0.97);padding:15px 20px;">
+          <h4 style="margin:0 0 8px;color:#8c7b4a;border-bottom:1px solid rgba(0,0,0,0.1);font-size:0.9em;text-transform:uppercase;">Textauszug 1</h4>
+          <p style="margin:0;font-size:1.1em;line-height:1.6;color:#222;">
+            "<strong style="color:#bf4040;font-size:1.2em;">M</strong>oderne
+            <strong style="color:#bf4040;font-size:1.2em;">a</strong>lgorithmische
+            <strong style="color:#bf4040;font-size:1.2em;">C</strong>omputersysteme können
+            <strong style="color:#bf4040;font-size:1.2em;">h</strong>eute bereits aus Daten lernen, ohne dass menschl<strong style="color:#bf4040;font-size:1.2em;">i</strong>che Programmierer jede einzelne Regel festlegen müsse<strong style="color:#bf4040;font-size:1.2em;">n</strong>. Dies<strong style="color:#bf4040;font-size:1.2em;">e</strong> Fähigkeit revolutioniert zahlreiche Anwendungsbereiche."
+          </p>
+        </div>
+      </div>
+
+      <div style="position:relative;display:inline-block;width:fit-content;max-width:540px;border-radius:8px;overflow:hidden;box-shadow:2px 2px 8px rgba(0,0,0,0.15);border-left:5px solid #bcd4bc;transform:rotate(0.8deg);">
+        <div style="background-color:rgba(245,249,245,0.97);padding:15px 20px;">
+          <h4 style="margin:0 0 8px;color:#6b8e6b;border-bottom:1px solid rgba(0,0,0,0.1);font-size:0.9em;text-transform:uppercase;">Textauszug 2</h4>
+          <p style="margin:0;font-size:1.1em;line-height:1.6;color:#222;">
+            "<strong style="color:#3b7bad;font-size:1.2em;">L</strong>ern<strong style="color:#3b7bad;font-size:1.2em;">e</strong>nde Systeme p<strong style="color:#3b7bad;font-size:1.2em;">a</strong>ssen sich kontinuie<strong style="color:#3b7bad;font-size:1.2em;">r</strong>lich a<strong style="color:#3b7bad;font-size:1.2em;">n</strong> neue Daten an, <strong style="color:#3b7bad;font-size:1.2em;">i</strong>ndem sie Muster erke<strong style="color:#3b7bad;font-size:1.2em;">n</strong>nen und ihre Vorhersagemodelle optimieren. Der Prozess erfordert keine manuelle Pro<strong style="color:#3b7bad;font-size:1.2em;">g</strong>rammierung jeder Einzelregel."
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Cell 5: find_solution widget -->
+  <div class="cell">
+    <div class="alert alert-info" style="border-radius:10px;position:relative;padding:24px 32px 20px;margin-top:25px;border:4px solid #31708f;max-width:420px;margin-left:auto;margin-right:auto;">
+      <span style="position:absolute;top:-28px;left:16px;background:#31708f;color:white;border-radius:50%;width:56px;height:56px;display:inline-flex;align-items:center;justify-content:center;font-size:28px;"><i class="fa fa-check-circle"></i></span>
+      <div style="text-align:center;margin-bottom:16px;">
+        <h3 style="color:#31708f;margin:0 0 6px;">🔍 Lösungswort ermitteln</h3>
+        <p style="margin:0;color:#31708f;font-size:14px;">Gib das Lösungswort ein, um fortzufahren:</p>
+      </div>
+      <hr style="border:none;border-top:1px solid #31708f;opacity:0.3;margin-bottom:16px;">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:10px;">
+        <input id="pw-input" type="password" placeholder="Lösungswort eingeben …" style="border:1.5px solid #31708f;border-radius:6px;padding:7px 12px;font-size:14px;width:280px;outline:none;background:white;">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <input type="checkbox" id="pw-show" style="cursor:pointer;">
+          <label for="pw-show" style="color:#31708f;font-size:13px;cursor:pointer;">Lösungswort anzeigen</label>
+        </div>
+        <button id="pw-btn" style="background:#31708f;color:white;border:none;border-radius:6px;padding:9px 28px;font-weight:bold;font-size:14px;cursor:pointer;">Bestätigen</button>
+        <p id="pw-feedback" style="margin:0;font-weight:bold;font-size:15px;text-align:center;"></p>
+      </div>
+      <div id="pw-nav" style="display:none;margin-top:16px;text-align:center;">
+        <a href="learning_2.html" style="display:inline-block;padding:10px 24px;border-radius:8px;border:3px solid #31708f;background:#beeaf1;color:#31708f;text-decoration:none;font-weight:bold;box-shadow:0 2px 6px rgba(0,0,0,0.15);">Weiter zu Teil 2 &nbsp;<i class="fa fa-arrow-right"></i></a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    var input=document.getElementById("pw-input"),btn=document.getElementById("pw-btn"),showCb=document.getElementById("pw-show"),fb=document.getElementById("pw-feedback"),nav=document.getElementById("pw-nav");
+    showCb.addEventListener("change",function(){input.type=this.checked?"text":"password";});
+    function check(){
+      var v=input.value.toLowerCase().replace(/[\s-]/g,'');
+      if(v==="machinelearning"){fb.style.color="#3c763d";fb.textContent="✅ Lösungswort korrekt! Du kannst fortfahren.";nav.style.display="block";}
+      else{fb.style.color="#a94442";fb.textContent="❌ Falsches Lösungswort. Bitte versuche es erneut.";nav.style.display="none";}
+    }
+    btn.onclick=check;
+    input.addEventListener("keydown",function(e){if(e.key==="Enter")check();});
+  </script>
+</body>
+</html>

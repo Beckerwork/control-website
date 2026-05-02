@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Machine Learning – Teil 2: Daten und Vorhersage</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/3.4.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.32.0/plotly.min.js"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; max-width: 900px; margin: 0 auto; padding: 30px 20px 80px; background: #f5f5f5; line-height: 1.6; }
+    .chapter-nav { display: flex; gap: 6px; margin-bottom: 28px; align-items: center; }
+    .chapter-dot { width: 30px; height: 30px; border-radius: 50%; background: #ddd; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; color: #666; text-decoration: none; }
+    .chapter-dot.active { background: #31708f; color: white; }
+    .chapter-dot.done   { background: #3c763d; color: white; }
+    .cell { margin-top: 44px; }
+    .alert-success { background-color: #dff0d8 !important; }
+    .alert-info    { background-color: #d9edf7 !important; }
+    .alert-danger  { background-color: #f2dede !important; }
+    .slider-row { display: flex; align-items: center; gap: 12px; margin: 8px 0; }
+    .slider-row label { min-width: 140px; font-size: 14px; }
+    .slider-row input[type=range] { flex: 1; }
+    .slider-row span { min-width: 60px; font-size: 14px; font-family: monospace; }
+    #warning-box { display: none; background: #fcf8e3; border: 1px solid #8a6d3b; border-radius: 6px; padding: 10px 16px; margin-top: 10px; font-size: 14px; color: #8a6d3b; text-align: center; }
+    #ch-slider { -webkit-appearance: none; appearance: none; height: 28px; border-radius: 6px; outline: none; cursor: pointer; touch-action: pan-y; }
+    #ch-slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 36px; height: 36px; border-radius: 50%; background: #31708f; cursor: pointer; border: 3px solid white; box-shadow: 0 1px 4px rgba(0,0,0,0.3); }
+    #ch-slider::-moz-range-thumb { width: 36px; height: 36px; border-radius: 50%; background: #31708f; cursor: pointer; border: 3px solid white; box-shadow: 0 1px 4px rgba(0,0,0,0.3); }
+  </style>
+</head>
+<body>
+  <nav class="chapter-nav">
+    <span style="font-size:13px;color:#888;margin-right:4px;">Teil</span>
+    <a class="chapter-dot done" href="learning_1.html">1</a>
+    <span class="chapter-dot active">2</span>
+    <span class="chapter-dot" style="pointer-events:none;">3</span>
+    <span class="chapter-dot" style="pointer-events:none;">4</span>
+    <span class="chapter-dot" style="pointer-events:none;">5</span>
+    <span class="chapter-dot" style="pointer-events:none;">6</span>
+  </nav>
+
+  <!-- Cell 1: Daten sammeln und speichern -->
+  <div class="cell">
+    <div class="alert alert-success" style="border-radius:10px;position:relative;padding:24px 24px 20px;margin-top:25px;border:4px solid #3c763d;">
+      <span style="position:absolute;top:-28px;left:16px;background:#3c763d;color:white;border-radius:50%;width:56px;height:56px;display:inline-flex;align-items:center;justify-content:center;font-size:28px;"><i class="fa fa-book"></i></span>
+      <h2>Daten sammeln und speichern</h2>
+      <div style="display:flex;gap:16px;align-items:flex-start;">
+        <p style="margin-top:0;">Die Daten, die von großen Unternehmen täglich gesammelt werden, werden in großen Räumen auf sogenannten Servern gespeichert. In einem Serverraum stehen viele Schränke, die voll mit blinkenden Computern sind.<br><br>Es werden zum Beispiel Bewegungsprofile, Schlafrhythmen und soziale Verbindungen gespeichert. Damit können Profile von einzelnen Menschen zusammengebaut werden. Diese Daten könnten z.B. über eine Smartwatch oder Soziale Medien gesammelt werden.<br><br>Die Daten werden meistens sicher und verschlüsselt aufbewahrt, damit niemand Unbefugtes Zugriff darauf bekommt. Es passiert aber leider immer wieder, dass Unbefugte Zugriff auf diese Daten bekommen und sie im schlimmsten Fall veröffentlichen.</p>
+        <img src="src/images/server.jpg" style="max-width:220px;border-radius:6px;flex-shrink:0;">
+      </div>
+    </div>
+  </div>
+
+  <!-- Cell 2: Das Vorhersageproblem -->
+  <div class="cell">
+    <div class="alert alert-success" style="border-radius:10px;position:relative;padding:24px 24px 20px;margin-top:25px;border:4px solid #3c763d;">
+      <span style="position:absolute;top:-28px;left:16px;background:#3c763d;color:white;border-radius:50%;width:56px;height:56px;display:inline-flex;align-items:center;justify-content:center;font-size:28px;"><i class="fa fa-book"></i></span>
+      <h2>Das Vorhersageproblem</h2>
+      <div style="display:flex;gap:16px;align-items:flex-start;">
+        <div>
+          <p style="margin-top:0;">Computersysteme können über Sensoren mittlerweile viele Dinge erkennen. Was jeder kennt, sind beispielsweise Bewegungsmelder, die Bewegungen erkennen können. Es gibt auch Wärmesensoren, die Temperaturen in der Umgebung erkennen können. Außerdem gibt es Kamerasysteme, welche die Größe von Dingen in ihrem Sichtfeld berechnen können. Zahlreiche Systeme in unserem Alltag nutzen solche Sensoren. Man kann seinen Puls messen, die Geschwindigkeit im Auto oder seinen Standort in Navigations Apps anzeigen lassen. Diese Sensoren messen etwas in einem Moment und geben dann eine Information zurück.</p>
+          <hr>
+          <p>Aber es gibt auch Technologien, die es Systemen ermöglichen, Dinge vorherzusagen, die nicht gerade im Moment messbar sind. Dafür werden gespeicherte Daten genutzt, mit denen Berechnungen durchgeführt werden.<br><br>Stell dir vor, ein System soll vorhersagen, wie schnell ein Kind rennen kann. Das ist möglich, basierend nur auf der Körpergröße eines Kindes und einem Datensatz, der über ganz viele Kinder gespeichert worden ist. Es ist zwar keine genaue und mit Sicherheit passende Vorhersage möglich, aber es kann ein Wert geschätzt werden.</p>
+        </div>
+        <img src="src/images/running.jpg" style="max-width:300px;border-radius:6px;flex-shrink:0;">
+      </div>
+      <hr>
+      <p>Angenommen, es wurden Daten von vielen Kindern gesammelt. Ihre Körpergröße (in cm) und ihre maximale Laufgeschwindigkeit (in km/h). Diese Daten können in einem Diagramm dargestellt werden.</p>
+      <p>Auf der horizontalen Achse nach rechts (x-Achse) steht die Körpergröße, auf der vertikalen Achse nach oben (y-Achse) die Geschwindigkeit.</p>
+      <p>Schaue dir das nächste Diagramm an, wo die Daten als blaue Punkte dargestellt werden:</p>
+    </div>
+  </div>
+
+  <!-- show_plot_kids() -->
+  <div class="cell">
+    <div style="background:white;border:1px solid #ddd;border-radius:8px;padding:4px;">
+      <div id="plot-kids" style="width:100%;height:430px;"></div>
+    </div>
+  </div>
+
+  <!-- Cell 4: Die Vorhersagetechnik -->
+  <div class="cell">
+    <div class="alert alert-success" style="border-radius:10px;position:relative;padding:24px 24px 20px;margin-top:25px;border:4px solid #3c763d;">
+      <span style="position:absolute;top:-28px;left:16px;background:#3c763d;color:white;border-radius:50%;width:56px;height:56px;display:inline-flex;align-items:center;justify-content:center;font-size:28px;"><i class="fa fa-book"></i></span>
+      <h2>Die Vorhersagetechnik</h2>
+      <img src="src/images/datapoints.jpg" style="float:right;margin-left:16px;margin-bottom:8px;max-width:300px;border-radius:6px;">
+      <p>Jeder Punkt im Diagramm steht für ein Kind. Dabei wurden zwei Dinge gemessen. Die Körpergröße und die maximale Laufgeschwindigkeit.</p>
+      <p>Um mit diesen Datenpunkten Vorhersagen zu machen, wird eine Gerade durch diese Punkte gelegt. Die Gerade muss so gelegt werden, dass sie möglichst nah an allen Datenpunkten liegt. Mit dieser Geraden kann dann für jede beliebige Körpergröße eine Geschwindigkeit vorhergesagt werden. Auch wenn eine bestimmte Größe nicht im Datensatz vorkommt.</p>
+      <p>Beispiel: Angenommen, es soll die Geschwindigkeit für ein Kind mit einer Körpergröße von 145 cm vorhergesagt werden. Bei einer Größe von 145 cm gibt es keinen Datenpunkt. Die Gerade läuft dann trotzdem durch den Bereich. Dann kann damit eine Vorhersage getroffen werden. So eine Gerade nennt man eine <strong>Regressionsgerade</strong>. Was Regression bedeutet, wird später erklärt.</p>
+      <div style="clear:both;"></div>
+    </div>
+  </div>
+
+  <!-- Cell 5: Task 2.1 -->
+  <div class="cell">
+    <div class="alert alert-info" style="border-radius:10px;position:relative;padding:24px 24px 20px;margin-top:25px;border:4px solid #31708f;">
+      <span style="position:absolute;top:-28px;left:16px;background:#31708f;color:white;border-radius:50%;width:56px;height:56px;display:inline-flex;align-items:center;justify-content:center;font-size:28px;"><i class="fa fa-pencil"></i></span>
+      <h3>Aufgabe 2.1 – Regressionsgerade erstellen</h3>
+      <p>Jetzt bist du dran. Versuche, eine Gerade zu finden, die möglichst gut zu den Datenpunkten passt.</p>
+      <hr>
+      <p>Verändere die Steigung und den y-Achsenabschnitt deiner Geraden so, dass sie möglichst nah an allen Datenpunkten liegt. Je kleiner der Fehlerwert, desto besser.</p>
+      <p>Die durch Machine Learning berechnete Regressionsgerade kannst du zum Vergleich durch einen Klick auf „Zeige Regressionsgerade" anzeigen lassen. Aber nur, wenn deine Gerade schon genau genug ist!</p>
+    </div>
+  </div>
+
+  <!-- lineare_regression_big() -->
+  <div class="cell">
+    <div style="background:white;border:1px solid #ddd;border-radius:8px;padding:16px 20px;">
+      <div id="plot-regression" style="width:100%;height:480px;"></div>
+      <!-- Crosshair coordinate reader – touch-friendly -->
+      <div style="margin-top:14px;padding:12px 16px;background:#eef6fb;border-radius:8px;border:1px solid #aed4e8;">
+        <div style="font-size:13px;font-weight:bold;color:#1a5276;margin-bottom:10px;">📍 Koordinaten ablesen — Körpergröße: <strong id="ch-x-val">145</strong> cm</div>
+        <input type="range" id="ch-slider" min="105" max="180" value="145" style="width:100%;accent-color:#31708f;">
+        <div id="ch-readout" style="margin-top:8px;font-size:15px;color:#1a5276;min-height:22px;"></div>
+      </div>
+      <div style="margin-top:14px;border-top:1px solid #eee;padding-top:14px;">
+        <div class="slider-row">
+          <label>Steigung:</label>
+          <input type="range" id="slope-slider" min="0.10" max="0.40" step="0.01" value="0.10">
+          <span id="slope-val">0,10</span>
+        </div>
+        <div class="slider-row">
+          <label>y-Achsenabschnitt:</label>
+          <input type="range" id="intercept-slider" min="-30" max="-10" step="0.01" value="-10">
+          <span id="intercept-val">-10,00</span>
+        </div>
+      </div>
+      <div style="margin-top:12px;display:flex;align-items:center;gap:10px;">
+        <input type="checkbox" id="show-robot-line" style="cursor:pointer;width:16px;height:16px;">
+        <label for="show-robot-line" style="cursor:pointer;font-size:14px;margin:0;">Zeige Regressionsgerade</label>
+      </div>
+      <div id="warning-box">⚠️ Deine Gerade ist noch etwas zu ungenau. Bitte versuche es erneut.</div>
+    </div>
+  </div>
+
+  <!-- Hint -->
+  <div class="cell">
+    <details style="background:#fffdf0;border:1px solid #ffc107;border-radius:8px;padding:10px 16px;margin:6px 0;">
+      <summary style="cursor:pointer;font-weight:bold;color:#856404;">💡 Was ist der Fehlerwert?</summary>
+      <p style="margin-top:10px;color:black;">Der Fehlerwert zeigt, wie weit die Datenpunkte im Durchschnitt von der Geraden entfernt sind. Je kleiner der Wert, desto besser passt die Gerade zu den Daten und desto präziser sind die Vorhersagen.</p>
+    </details>
+  </div>
+
+  <!-- Cell 8: Task 2.2 -->
+  <div class="cell">
+    <div class="alert alert-info" style="border-radius:10px;position:relative;padding:24px 24px 20px;margin-top:25px;border:4px solid #31708f;">
+      <span style="position:absolute;top:-28px;left:16px;background:#31708f;color:white;border-radius:50%;width:56px;height:56px;display:inline-flex;align-items:center;justify-content:center;font-size:28px;"><i class="fa fa-pencil"></i></span>
+      <h3>Aufgabe 2.2 – Regressionsgerade benutzen</h3>
+      <p>Finde heraus: Wie schnell ist laut der Regressionsgerade ein Kind mit einer Körpergröße von 145 cm?</p>
+      <p><strong>Tipp:</strong> Schiebe den Regler unter dem Graphen auf 145 cm, um die Vorhersage direkt abzulesen.</p>
+    </div>
+  </div>
+
+  <!-- guess_speed_sachlich widget -->
+  <div class="cell">
+    <div class="alert alert-info" style="border-radius:10px;position:relative;padding:24px 24px 20px;margin-top:25px;border:4px solid #31708f;max-width:420px;margin-left:auto;margin-right:auto;">
+      <span style="position:absolute;top:-28px;left:16px;background:#31708f;color:white;border-radius:50%;width:56px;height:56px;display:inline-flex;align-items:center;justify-content:center;font-size:28px;"><i class="fa fa-bar-chart"></i></span>
+      <div style="text-align:center;margin-bottom:16px;">
+        <h3 style="color:#31708f;margin:0 0 6px;">📊 Vorhersage ablesen</h3>
+        <p style="margin:0;color:#31708f;font-size:14px;">Wie schnell ist ein Kind mit 145 cm Körpergröße?</p>
+      </div>
+      <hr style="border:none;border-top:1px solid #31708f;opacity:0.3;margin-bottom:16px;">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:10px;">
+        <input id="gs-input" type="text" placeholder="Zahl wie z.B. 10,50" style="border:1.5px solid #31708f;border-radius:6px;padding:7px 12px;font-size:14px;width:200px;outline:none;text-align:center;">
+        <button id="gs-btn" style="background:#31708f;color:white;border:none;border-radius:6px;padding:9px 28px;font-weight:bold;font-size:14px;cursor:pointer;">Überprüfen</button>
+        <p id="gs-feedback" style="margin:0;font-weight:bold;font-size:15px;text-align:center;"></p>
+        <p id="gs-hint" style="margin:0;color:#31708f;font-size:14px;text-align:center;"></p>
+      </div>
+      <div id="gs-nav" style="display:none;margin-top:16px;">
+        <div style="display:flex;justify-content:center;gap:8px;margin:8px 0;">
+          <a href="learning_1.html" style="padding:10px 24px;border-radius:8px;border:2px solid #31708f;background:white;color:#31708f;text-decoration:none;font-weight:bold;box-shadow:0 2px 4px rgba(0,0,0,0.1);"><i class="fa fa-arrow-left"></i> &nbsp; Zurück</a>
+          <a href="learning_3.html" style="padding:10px 24px;border-radius:8px;border:2px solid #31708f;background:#31708f;color:white;text-decoration:none;font-weight:bold;box-shadow:0 2px 4px rgba(0,0,0,0.1);">Weiter &nbsp;<i class="fa fa-arrow-right"></i></a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    var X_KIDS=[166.5465,128.4283,125.2944,123.3571,157.1723,123.0025,158.3436,153.9595,135.3065,139.51,164.5544,157.4583,119.2284,154.9395,134.1805,169.4844,122.6965,134.6285,166.5973,149.8122];
+    var Y_KIDS=[29.1629,13.7231,17.7741,11.6667,22.3171,15.8745,30.0717,28.4806,22.5023,21.0456,27.1379,27.5532,14.8145,25.1782,15.9643,29.2954,15.0287,14.7432,27.7746,19.6198];
+    var NAMED_IDX={0:'Lena',3:'Tim',5:'Jonas',8:'Maya',10:'Finn',13:'Clara'};
+    var OPT_SLOPE=0.327431,OPT_INT=-25.737280,OPT_MSE=6.092557;
+
+    function fmtDE(v,d){return v.toFixed(d).replace('.',',');}
+    function calcMSE(s,ic){var sum=0;for(var i=0;i<X_KIDS.length;i++){var p=s*X_KIDS[i]+ic;sum+=(Y_KIDS[i]-p)*(Y_KIDS[i]-p);}return sum/X_KIDS.length;}
+
+    var xDense=[];for(var x=105;x<=180;x++)xDense.push(x);
+    var plotCfg={displayModeBar:false,scrollZoom:false};
+
+    // ── Plot 1: show_plot_kids ──
+    var xBlue=[],yBlue=[],xOrange=[],yOrange=[],lblOrange=[];
+    for(var i=0;i<X_KIDS.length;i++){
+      if(NAMED_IDX[i]){xOrange.push(X_KIDS[i]);yOrange.push(Y_KIDS[i]);lblOrange.push(NAMED_IDX[i]);}
+      else{xBlue.push(X_KIDS[i]);yBlue.push(Y_KIDS[i]);}
+    }
+    Plotly.newPlot('plot-kids',[
+      {x:xBlue,y:yBlue,mode:'markers',type:'scatter',name:'Daten der Kinder',marker:{color:'#0173b2',size:9}},
+      {x:xOrange,y:yOrange,mode:'markers+text',type:'scatter',name:'Benannte Kinder',
+       text:lblOrange,textposition:'top center',marker:{color:'#de8f05',size:10},textfont:{color:'#de8f05',size:11}}
+    ],{
+      xaxis:{title:'Körpergröße (cm)',range:[105,180]},
+      yaxis:{title:'Maximale Geschwindigkeit (km/h)',range:[-1.5,31.5]},
+      title:{text:'Größe vs. maximale Geschwindigkeit',font:{size:15}},
+      legend:{orientation:'h',xanchor:'center',x:0.5,y:-0.18},
+      margin:{t:50,r:20,b:110,l:60},
+      plot_bgcolor:'white',paper_bgcolor:'white',dragmode:false
+    },plotCfg);
+
+    // ── Plot 2: lineare_regression_big ──
+    function studentY(s,ic){return xDense.map(function(x){return s*x+ic;});}
+    function legendStudent(s,ic){var m=calcMSE(s,ic);return 'Deine Gerade: Output = '+fmtDE(s,2)+' × Input + ('+fmtDE(ic,2)+')  (Fehlerwert: '+fmtDE(m,2)+')';}
+    function legendRobot(){return 'Regressionsgerade: Output = '+fmtDE(OPT_SLOPE,2)+' × Input + ('+fmtDE(OPT_INT,2)+')  (Fehlerwert: '+fmtDE(OPT_MSE,2)+')';}
+
+    var s0=0.10,ic0=-10.0;
+    Plotly.newPlot('plot-regression',[
+      {x:X_KIDS,y:Y_KIDS,mode:'markers',type:'scatter',name:'Daten der Kinder',marker:{color:'#0173b2',size:9}},
+      {x:xDense,y:studentY(s0,ic0),mode:'lines',type:'scatter',name:legendStudent(s0,ic0),line:{color:'#de8f05',width:2.5}},
+      {x:xDense,y:xDense.map(function(x){return OPT_SLOPE*x+OPT_INT;}),mode:'lines',type:'scatter',name:legendRobot(),line:{color:'#029e73',width:2.5},visible:false}
+    ],{
+      xaxis:{title:'Körpergröße (cm)',range:[-10,182],zeroline:true,zerolinecolor:'#ccc'},
+      yaxis:{title:'Maximale Geschwindigkeit (km/h)',range:[-35,36],zeroline:true,zerolinecolor:'#ccc'},
+      title:{text:'Größe vs. maximale Geschwindigkeit',font:{size:15}},
+      legend:{orientation:'h',xanchor:'center',x:0.5,y:-0.22,bgcolor:'rgba(255,255,255,0.9)',bordercolor:'#ddd',borderwidth:1},
+      margin:{t:50,r:20,b:140,l:60},
+      plot_bgcolor:'white',paper_bgcolor:'white',dragmode:false,hovermode:'closest',
+      shapes:[{type:'line',x0:145,x1:145,y0:-35,y1:36,line:{color:'#a94442',width:2,dash:'dot'}}]
+    },plotCfg);
+
+    // Crosshair
+    function updateCrosshair(){
+      var x=parseInt(document.getElementById('ch-slider').value);
+      document.getElementById('ch-x-val').textContent=x;
+      var s=parseFloat(document.getElementById('slope-slider').value);
+      var ic=parseFloat(document.getElementById('intercept-slider').value);
+      var html='<span style="color:#de8f05;font-size:16px;">⬤</span>&nbsp; Deine Gerade: <strong>'+fmtDE(s*x+ic,2)+' km/h</strong>';
+      if(document.getElementById('show-robot-line').checked){
+        html+='&emsp;<span style="color:#029e73;font-size:16px;">⬤</span>&nbsp; Regressionsgerade: <strong>'+fmtDE(OPT_SLOPE*x+OPT_INT,2)+' km/h</strong>';
+      }
+      document.getElementById('ch-readout').innerHTML=html;
+      Plotly.relayout('plot-regression',{'shapes[0].x0':x,'shapes[0].x1':x});
+    }
+    document.getElementById('ch-slider').addEventListener('input',updateCrosshair);
+
+    function updateLine(){
+      var s=parseFloat(document.getElementById('slope-slider').value);
+      var ic=parseFloat(document.getElementById('intercept-slider').value);
+      document.getElementById('slope-val').textContent=fmtDE(s,2);
+      document.getElementById('intercept-val').textContent=fmtDE(ic,2);
+      document.getElementById('show-robot-line').checked=false;
+      Plotly.restyle('plot-regression',{y:[studentY(s,ic)],name:[legendStudent(s,ic)]},[1]);
+      Plotly.restyle('plot-regression',{visible:false},[2]);
+      updateCrosshair();
+    }
+    document.getElementById('slope-slider').addEventListener('input',updateLine);
+    document.getElementById('intercept-slider').addEventListener('input',updateLine);
+
+    var warnT=null;
+    document.getElementById('show-robot-line').addEventListener('change',function(){
+      if(!this.checked){Plotly.restyle('plot-regression',{visible:false},[2]);updateCrosshair();return;}
+      var s=parseFloat(document.getElementById('slope-slider').value);
+      var ic=parseFloat(document.getElementById('intercept-slider').value);
+      if(Math.abs(calcMSE(s,ic)-OPT_MSE)>5){
+        this.checked=false;
+        var wb=document.getElementById('warning-box');wb.style.display='block';
+        if(warnT)clearTimeout(warnT);
+        warnT=setTimeout(function(){wb.style.display='none';},3000);
+      }else{Plotly.restyle('plot-regression',{visible:true},[2]);updateCrosshair();}
+    });
+    updateCrosshair();
+
+    // guess_speed_sachlich
+    function checkSpeed(){
+      var raw=document.getElementById('gs-input').value.trim().replace(',','.');
+      var fb=document.getElementById('gs-feedback'),hint=document.getElementById('gs-hint'),nav=document.getElementById('gs-nav');
+      var v=parseFloat(raw);
+      if(isNaN(v)){fb.style.color='#a94442';fb.textContent='⚠️ Bitte eine Zahl eingeben (z. B. 10,50).';hint.textContent='';nav.style.display='none';return;}
+      if(Math.abs(v-22.11)<=1.0){
+        fb.style.color='#3c763d';fb.textContent='✅ Richtig! Die Vorhersage für ein Kind mit 145 cm liegt bei ca. 22,11 km/h.';
+        hint.style.color='#31708f';hint.textContent='Dein Wert liegt nah genug an der Vorhersage der Geraden.';nav.style.display='block';
+      }else{fb.style.color='#a94442';fb.textContent='❌ Nicht ganz. Schau nochmal genau auf die Gerade bei einer Körpergröße von 145 cm.';hint.textContent='';nav.style.display='none';}
+    }
+    document.getElementById('gs-btn').onclick=checkSpeed;
+    document.getElementById('gs-input').addEventListener('keydown',function(e){if(e.key==='Enter')checkSpeed();});
+  </script>
+</body>
+</html>
